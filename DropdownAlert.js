@@ -31,6 +31,7 @@ export default class DropdownAlert extends Component {
     cancelBtnImageStyle: Image.propTypes.style,
     titleNumOfLines: PropTypes.number,
     messageNumOfLines: PropTypes.number,
+    onPress: PropTypes.func,
     onClose: PropTypes.func,
     onCancel: PropTypes.func,
     showCancel: PropTypes.bool,
@@ -44,6 +45,7 @@ export default class DropdownAlert extends Component {
     inactiveStatusBarBackgroundColor: PropTypes.string
   }
   static defaultProps =  {
+    onPress: null,
     onClose: null,
     onCancel: null,
     closeInterval: 4000,
@@ -119,6 +121,7 @@ export default class DropdownAlert extends Component {
     this.dismiss = this.dismiss.bind(this)
     this.onCancel = this.onCancel.bind(this)
     this.onClose = this.onClose.bind(this)
+    this.onPress = this.onPress.bind(this)
     // Util
     this.animate = this.animate.bind(this)
     // Pan Responder
@@ -229,6 +232,11 @@ export default class DropdownAlert extends Component {
           }
         }
       }.bind(this), (this.state.duration))
+    }
+  }
+  onPress() {
+    if (this.props.onPress !== null) {
+      this.props.onPress();
     }
   }
   onClose(action) {
@@ -410,7 +418,7 @@ export default class DropdownAlert extends Component {
               right: 0
             }}>
             <TouchableHighlight
-                onPress={(this.props.showCancel) ? null : () => this.onClose('tap')}
+                onPress={this.onPress}
                 underlayColor={backgroundColor}
                 disabled={!this.props.tapToCloseEnabled}
                 onLayout={(event) => this.onLayoutEvent(event)}>
