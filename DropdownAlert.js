@@ -36,6 +36,7 @@ export default class DropdownAlert extends Component {
     cancelBtnImageStyle: Image.propTypes.style,
     titleNumOfLines: PropTypes.number,
     messageNumOfLines: PropTypes.number,
+    onPress: PropTypes.func,
     onClose: PropTypes.func,
     onCancel: PropTypes.func,
     showCancel: PropTypes.bool,
@@ -55,6 +56,7 @@ export default class DropdownAlert extends Component {
     defaultTextContainer: ViewPropTypes.style,
   };
   static defaultProps = {
+    onPress: null,
     onClose: null,
     onCancel: null,
     closeInterval: 4000,
@@ -236,6 +238,11 @@ export default class DropdownAlert extends Component {
         }.bind(this),
         delayInMilliSeconds
       );
+    }
+  };
+  onPress = () => {
+    if (this.props.onPress !== null) {
+      this.props.onPress();
     }
   };
   close = action => {
@@ -423,7 +430,7 @@ export default class DropdownAlert extends Component {
         >
           <TouchableOpacity
             activeOpacity={!this.props.tapToCloseEnabled || showCancel ? 1 : 0.95}
-            onPress={showCancel ? null : () => this.close('tap')}
+            onPress={this.onPress}
             disabled={!this.props.tapToCloseEnabled}
             onLayout={event => this.onLayoutEvent(event)}
           >
