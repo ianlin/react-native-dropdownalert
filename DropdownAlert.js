@@ -38,11 +38,13 @@ export default class DropdownAlert extends Component {
     cancelBtnImageStyle: Image.propTypes.style,
     titleNumOfLines: PropTypes.number,
     messageNumOfLines: PropTypes.number,
+    onPress: PropTypes.func,
     onClose: PropTypes.func,
     onCancel: PropTypes.func,
     showCancel: PropTypes.bool
   }
   static defaultProps =  {
+    onPress: null,
     onClose: null,
     onCancel: null,
     closeInterval: 4000,
@@ -106,6 +108,7 @@ export default class DropdownAlert extends Component {
     this.dismiss = this.dismiss.bind(this)
     this.onCancel = this.onCancel.bind(this)
     this.onClose = this.onClose.bind(this)
+    this.onPress = this.onPress.bind(this)
     // Util
     this.animate = this.animate.bind(this)
     // Pan Responder
@@ -177,6 +180,11 @@ export default class DropdownAlert extends Component {
       }.bind(this), (this.state.duration))
     }
   }
+  onPress() {
+    if (this.props.onPress !== null) {
+      this.props.onPress();
+    }
+  }
   onClose() {
     this.dismiss(this.props.onClose)
   }
@@ -236,7 +244,7 @@ export default class DropdownAlert extends Component {
     return true
   }
   handleMoveShouldSetPanResponder(e: Object, gestureState: Object): boolean {
-    return true
+    return gestureState.dx !== 0 && gestureState.dy !== 0;
   }
   handlePanResponderMove(e: Object, gestureState: Object) {
     if (gestureState.dy < 0) {
@@ -349,7 +357,7 @@ export default class DropdownAlert extends Component {
             }}>
             {this.renderStatusBar(this.state.type, backgroundColor)}
             <TouchableHighlight
-                onPress={(this.props.showCancel) ? null : this.onClose}
+                onPress={this.onPress}
                 underlayColor={backgroundColor}
                 onLayout={(event) => this.onLayoutEvent(event)}>
               <View style={style}>
